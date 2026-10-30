@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+config="${XDG_CONFIG_HOME:-$HOME/.config}/zkvim"
+if [ ! -f "$config/init.lua" ]; then
+  printf 'zkvim is not installed at %s. Run bin/install from the zkvim repo.\n' "$config" >&2
+  exit 1
+fi
+export NVIM_APPNAME=zkvim
+exec nvim "$@"

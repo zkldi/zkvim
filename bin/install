@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
+config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+target="$config_home/zkvim"
+
+if [ -e "$target" ] || [ -L "$target" ]; then
+  if [ ! -L "$target" ] || [ "$(readlink "$target")" != "$root" ]; then
+    printf 'Refusing to replace existing path: %s\n' "$target" >&2
+    exit 1
+  fi
+else
+  mkdir -p "$config_home"
+  ln -s "$root" "$target"
+fi
+printf 'Config: %s\nLaunch with: NVIM_APPNAME=zkvim nvim\n' "$target"
